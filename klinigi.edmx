@@ -1,0 +1,366 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="DOKTOR">
+          <Key>
+            <PropertyRef Name="doktorNo" />
+          </Key>
+          <Property Name="doktorNo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="doktorAdi" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="doktorSoyadi" Type="varchar" MaxLength="20" />
+          <Property Name="e_mail" Type="varchar" MaxLength="20" />
+          <Property Name="sifre" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FATURE">
+          <Key>
+            <PropertyRef Name="fatureNo" />
+          </Key>
+          <Property Name="fatureNo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fatureTarihi" Type="date" />
+          <Property Name="randevuNo" Type="int" />
+        </EntityType>
+        <EntityType Name="HASTA">
+          <Key>
+            <PropertyRef Name="hastaNo" />
+          </Key>
+          <Property Name="hastaNo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="hastaAdi" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="hastaSoyadi" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="hastaAdresi" Type="varchar" MaxLength="100" />
+          <Property Name="hastaTelefonu" Type="varchar" MaxLength="20" />
+          <Property Name="hastaDurumu" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="ODEME">
+          <Key>
+            <PropertyRef Name="odemeNo" />
+          </Key>
+          <Property Name="odemeNo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="odemeTarihi" Type="date" />
+          <Property Name="odemeSekli" Type="varchar" MaxLength="20" />
+          <Property Name="odemeMiktari" Type="money" />
+          <Property Name="hastaNo" Type="int" />
+          <Property Name="fatureNo" Type="int" />
+        </EntityType>
+        <EntityType Name="RANDEVU">
+          <Key>
+            <PropertyRef Name="randevuNo" />
+          </Key>
+          <Property Name="randevuNo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="randevuTarihi" Type="date" />
+          <Property Name="randevuNedeni" Type="varchar" MaxLength="100" />
+          <Property Name="randevuSuresi" Type="varchar" MaxLength="20" />
+          <Property Name="doktorNo" Type="int" />
+          <Property Name="hastaNo" Type="int" />
+        </EntityType>
+        <Association Name="FK_FATURE_RANDEVU">
+          <End Role="RANDEVU" Type="Self.RANDEVU" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="FATURE" Type="Self.FATURE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RANDEVU">
+              <PropertyRef Name="randevuNo" />
+            </Principal>
+            <Dependent Role="FATURE">
+              <PropertyRef Name="randevuNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ODEME_HASTA">
+          <End Role="HASTA" Type="Self.HASTA" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ODEME" Type="Self.ODEME" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HASTA">
+              <PropertyRef Name="hastaNo" />
+            </Principal>
+            <Dependent Role="ODEME">
+              <PropertyRef Name="hastaNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RANDEVU_DOKTOR">
+          <End Role="DOKTOR" Type="Self.DOKTOR" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="RANDEVU" Type="Self.RANDEVU" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DOKTOR">
+              <PropertyRef Name="doktorNo" />
+            </Principal>
+            <Dependent Role="RANDEVU">
+              <PropertyRef Name="doktorNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RANDEVU_HASTA">
+          <End Role="HASTA" Type="Self.HASTA" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="RANDEVU" Type="Self.RANDEVU" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HASTA">
+              <PropertyRef Name="hastaNo" />
+            </Principal>
+            <Dependent Role="RANDEVU">
+              <PropertyRef Name="hastaNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ModelStoreContainer">
+          <EntitySet Name="DOKTOR" EntityType="Self.DOKTOR" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FATURE" EntityType="Self.FATURE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HASTA" EntityType="Self.HASTA" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ODEME" EntityType="Self.ODEME" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RANDEVU" EntityType="Self.RANDEVU" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_FATURE_RANDEVU" Association="Self.FK_FATURE_RANDEVU">
+            <End Role="RANDEVU" EntitySet="RANDEVU" />
+            <End Role="FATURE" EntitySet="FATURE" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ODEME_HASTA" Association="Self.FK_ODEME_HASTA">
+            <End Role="HASTA" EntitySet="HASTA" />
+            <End Role="ODEME" EntitySet="ODEME" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RANDEVU_DOKTOR" Association="Self.FK_RANDEVU_DOKTOR">
+            <End Role="DOKTOR" EntitySet="DOKTOR" />
+            <End Role="RANDEVU" EntitySet="RANDEVU" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RANDEVU_HASTA" Association="Self.FK_RANDEVU_HASTA">
+            <End Role="HASTA" EntitySet="HASTA" />
+            <End Role="RANDEVU" EntitySet="RANDEVU" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="DOKTOR">
+          <Key>
+            <PropertyRef Name="doktorNo" />
+          </Key>
+          <Property Name="doktorNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="doktorAdi" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="doktorSoyadi" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="e_mail" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="sifre" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="RANDEVUs" Relationship="Self.FK_RANDEVU_DOKTOR" FromRole="DOKTOR" ToRole="RANDEVU" />
+        </EntityType>
+        <EntityType Name="FATURE">
+          <Key>
+            <PropertyRef Name="fatureNo" />
+          </Key>
+          <Property Name="fatureNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fatureTarihi" Type="DateTime" Precision="0" />
+          <Property Name="randevuNo" Type="Int32" />
+          <NavigationProperty Name="RANDEVU" Relationship="Self.FK_FATURE_RANDEVU" FromRole="FATURE" ToRole="RANDEVU" />
+        </EntityType>
+        <EntityType Name="HASTA">
+          <Key>
+            <PropertyRef Name="hastaNo" />
+          </Key>
+          <Property Name="hastaNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="hastaAdi" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="hastaSoyadi" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="hastaAdresi" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="hastaTelefonu" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="hastaDurumu" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ODEMEs" Relationship="Self.FK_ODEME_HASTA" FromRole="HASTA" ToRole="ODEME" />
+          <NavigationProperty Name="RANDEVUs" Relationship="Self.FK_RANDEVU_HASTA" FromRole="HASTA" ToRole="RANDEVU" />
+        </EntityType>
+        <EntityType Name="ODEME">
+          <Key>
+            <PropertyRef Name="odemeNo" />
+          </Key>
+          <Property Name="odemeNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="odemeTarihi" Type="DateTime" Precision="0" />
+          <Property Name="odemeSekli" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="odemeMiktari" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="hastaNo" Type="Int32" />
+          <Property Name="fatureNo" Type="Int32" />
+          <NavigationProperty Name="HASTA" Relationship="Self.FK_ODEME_HASTA" FromRole="ODEME" ToRole="HASTA" />
+        </EntityType>
+        <EntityType Name="RANDEVU">
+          <Key>
+            <PropertyRef Name="randevuNo" />
+          </Key>
+          <Property Name="randevuNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="randevuTarihi" Type="DateTime" Precision="0" />
+          <Property Name="randevuNedeni" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="randevuSuresi" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="doktorNo" Type="Int32" />
+          <Property Name="hastaNo" Type="Int32" />
+          <NavigationProperty Name="DOKTOR" Relationship="Self.FK_RANDEVU_DOKTOR" FromRole="RANDEVU" ToRole="DOKTOR" />
+          <NavigationProperty Name="FATUREs" Relationship="Self.FK_FATURE_RANDEVU" FromRole="RANDEVU" ToRole="FATURE" />
+          <NavigationProperty Name="HASTA" Relationship="Self.FK_RANDEVU_HASTA" FromRole="RANDEVU" ToRole="HASTA" />
+        </EntityType>
+        <Association Name="FK_RANDEVU_DOKTOR">
+          <End Role="DOKTOR" Type="Self.DOKTOR" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="RANDEVU" Type="Self.RANDEVU" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DOKTOR">
+              <PropertyRef Name="doktorNo" />
+            </Principal>
+            <Dependent Role="RANDEVU">
+              <PropertyRef Name="doktorNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FATURE_RANDEVU">
+          <End Role="RANDEVU" Type="Self.RANDEVU" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="FATURE" Type="Self.FATURE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RANDEVU">
+              <PropertyRef Name="randevuNo" />
+            </Principal>
+            <Dependent Role="FATURE">
+              <PropertyRef Name="randevuNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ODEME_HASTA">
+          <End Role="HASTA" Type="Self.HASTA" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ODEME" Type="Self.ODEME" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HASTA">
+              <PropertyRef Name="hastaNo" />
+            </Principal>
+            <Dependent Role="ODEME">
+              <PropertyRef Name="hastaNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RANDEVU_HASTA">
+          <End Role="HASTA" Type="Self.HASTA" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="RANDEVU" Type="Self.RANDEVU" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HASTA">
+              <PropertyRef Name="hastaNo" />
+            </Principal>
+            <Dependent Role="RANDEVU">
+              <PropertyRef Name="hastaNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Göz_kliniğiEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="DOKTORs" EntityType="Self.DOKTOR" />
+          <EntitySet Name="FATUREs" EntityType="Self.FATURE" />
+          <EntitySet Name="HASTAs" EntityType="Self.HASTA" />
+          <EntitySet Name="ODEMEs" EntityType="Self.ODEME" />
+          <EntitySet Name="RANDEVUs" EntityType="Self.RANDEVU" />
+          <AssociationSet Name="FK_RANDEVU_DOKTOR" Association="Self.FK_RANDEVU_DOKTOR">
+            <End Role="DOKTOR" EntitySet="DOKTORs" />
+            <End Role="RANDEVU" EntitySet="RANDEVUs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FATURE_RANDEVU" Association="Self.FK_FATURE_RANDEVU">
+            <End Role="RANDEVU" EntitySet="RANDEVUs" />
+            <End Role="FATURE" EntitySet="FATUREs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ODEME_HASTA" Association="Self.FK_ODEME_HASTA">
+            <End Role="HASTA" EntitySet="HASTAs" />
+            <End Role="ODEME" EntitySet="ODEMEs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RANDEVU_HASTA" Association="Self.FK_RANDEVU_HASTA">
+            <End Role="HASTA" EntitySet="HASTAs" />
+            <End Role="RANDEVU" EntitySet="RANDEVUs" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="Göz_kliniğiEntities">
+          <EntitySetMapping Name="DOKTORs">
+            <EntityTypeMapping TypeName="Model.DOKTOR">
+              <MappingFragment StoreEntitySet="DOKTOR">
+                <ScalarProperty Name="doktorNo" ColumnName="doktorNo" />
+                <ScalarProperty Name="doktorAdi" ColumnName="doktorAdi" />
+                <ScalarProperty Name="doktorSoyadi" ColumnName="doktorSoyadi" />
+                <ScalarProperty Name="e_mail" ColumnName="e_mail" />
+                <ScalarProperty Name="sifre" ColumnName="sifre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FATUREs">
+            <EntityTypeMapping TypeName="Model.FATURE">
+              <MappingFragment StoreEntitySet="FATURE">
+                <ScalarProperty Name="fatureNo" ColumnName="fatureNo" />
+                <ScalarProperty Name="fatureTarihi" ColumnName="fatureTarihi" />
+                <ScalarProperty Name="randevuNo" ColumnName="randevuNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HASTAs">
+            <EntityTypeMapping TypeName="Model.HASTA">
+              <MappingFragment StoreEntitySet="HASTA">
+                <ScalarProperty Name="hastaNo" ColumnName="hastaNo" />
+                <ScalarProperty Name="hastaAdi" ColumnName="hastaAdi" />
+                <ScalarProperty Name="hastaSoyadi" ColumnName="hastaSoyadi" />
+                <ScalarProperty Name="hastaAdresi" ColumnName="hastaAdresi" />
+                <ScalarProperty Name="hastaTelefonu" ColumnName="hastaTelefonu" />
+                <ScalarProperty Name="hastaDurumu" ColumnName="hastaDurumu" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ODEMEs">
+            <EntityTypeMapping TypeName="Model.ODEME">
+              <MappingFragment StoreEntitySet="ODEME">
+                <ScalarProperty Name="odemeNo" ColumnName="odemeNo" />
+                <ScalarProperty Name="odemeTarihi" ColumnName="odemeTarihi" />
+                <ScalarProperty Name="odemeSekli" ColumnName="odemeSekli" />
+                <ScalarProperty Name="odemeMiktari" ColumnName="odemeMiktari" />
+                <ScalarProperty Name="hastaNo" ColumnName="hastaNo" />
+                <ScalarProperty Name="fatureNo" ColumnName="fatureNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RANDEVUs">
+            <EntityTypeMapping TypeName="Model.RANDEVU">
+              <MappingFragment StoreEntitySet="RANDEVU">
+                <ScalarProperty Name="randevuNo" ColumnName="randevuNo" />
+                <ScalarProperty Name="randevuTarihi" ColumnName="randevuTarihi" />
+                <ScalarProperty Name="randevuNedeni" ColumnName="randevuNedeni" />
+                <ScalarProperty Name="randevuSuresi" ColumnName="randevuSuresi" />
+                <ScalarProperty Name="doktorNo" ColumnName="doktorNo" />
+                <ScalarProperty Name="hastaNo" ColumnName="hastaNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
